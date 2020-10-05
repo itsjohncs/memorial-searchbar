@@ -1,0 +1,8 @@
+#gallery img {
+    width: 100px;
+    height: 130px;
+}
+
+#gallery a.hidden {
+    display: none;
+}
