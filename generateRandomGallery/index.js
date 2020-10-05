@@ -1,11 +1,15 @@
+import _colors from "./_colors";
+import _names from "./_names";
+
+
 function urlEncode(str) {
     return encodeURIComponent(str).replace(/%20/g, "+");
 }
 
 
-function urlEncodeObject(obj) {
+function urlEncodeKeyValues(keyValues) {
     const encodedParts = [];
-    for (const [k, v] of Object.entries(obj)) {
+    for (const [k, v] of keyValues) {
         if (typeof k !== "string" || typeof v !== "string") {
             throw new Error(
                 "Both keys and values must be strings, got" +
@@ -37,26 +41,27 @@ function selectRandomly(collection) {
 
 
 function generateRandomGallery(container, numItems) {
-    const colors = ["black", "silver", "gray", "white", "maroon", "red", "purple", "fuchsia", "green", "lime", "olive", "yellow", "navy", "blue", "teal", "aqua", "orange", "aliceblue", "antiquewhite", "aquamarine", "azure", "beige", "bisque", "blanchedalmond", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "cyan"];
-    const names = [
-        "May Carey",
-        "Chenda Thompkins",
-        "Lorena Morello",
-        "Tatenda Waterman",
-        "Prakash Kjeldsen",
-    ];
     for (let i = 0; i < numItems; ++i) {
+        const name = selectRandomly(_names);
+
         const img = document.createElement("img");
-        img.setAttribute("src", blankSvgAsDataUri(selectRandomly(colors)));
-        img.setAttribute("alt", selectRandomly(names));
+        img.setAttribute("src", blankSvgAsDataUri(selectRandomly(_colors)));
+        img.setAttribute("alt", `${name}.jpg`);
         
-        const fields = {
-            age: "" + Math.floor(Math.random() * 40),
-        };
+        const fields = [
+            ["name", name],
+            ["age", "" + Math.floor(Math.random() * 40)],
+        ];
         
         const link = document.createElement("a");
-        link.setAttribute("href", "/?" + urlEncodeObject(fields));
-        link.appendChild(img);
+        link.setAttribute("href", "/?" + urlEncodeKeyValues(fields));
+        link.appendChild(img);        
+
+        const description = document.createElement("div");
+        description.setAttribute("class", "description");
+        description.appendChild(document.createTextNode(
+            fields.map(([k, v]) => `${k}: ${v}`).join("\n")));
+        link.appendChild(description);
         
         container.appendChild(link);
     }
