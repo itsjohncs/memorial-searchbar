@@ -1,6 +1,8 @@
 import _colors from "./_colors";
 import _names from "./_names";
 
+import "./gallery.css";
+
 
 function urlEncode(str) {
     return encodeURIComponent(str).replace(/%20/g, "+");
@@ -51,6 +53,11 @@ function generateRandomGallery(container, numItems) {
         const fields = [
             ["name", name],
             ["age", "" + Math.floor(Math.random() * 40)],
+            ["involved", selectRandomly([
+                "on-duty-police",
+                "off-duty-police",
+                "other-hate-group"
+            ])]
         ];
         
         const link = document.createElement("a");
